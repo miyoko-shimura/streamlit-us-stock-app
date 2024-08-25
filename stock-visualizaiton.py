@@ -80,7 +80,7 @@ def main():
 
                 with col1:
                     st.markdown(f"<p style='text-align:center; font-size:16px;'>Stock Total Return ({stock_symbol})</p>", unsafe_allow_html=True)
-                    st.markdown(f"<h2 style='text-align:center; color: blue;'>{total_return:.2f}%</h2>", unsafe_allow_html=True)
+                    st.markdown(f"<h2 style='text-align:center;'>{total_return:.2f}%</h2>", unsafe_allow_html=True)
                 
                 with col2:
                     st.markdown("<p style='text-align:center; font-size:16px;'>S&P 500 Total Return</p>", unsafe_allow_html=True)
