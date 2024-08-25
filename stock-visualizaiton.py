@@ -66,23 +66,29 @@ def main():
             st.subheader('Summary')
             st.table(pd.DataFrame(summary_data).set_index('Metric'))
 
-            # Performance
+            # Performance and Comparison with S&P 500
             stock_return = (df['Close'].iloc[-1] - df['Close'].iloc[0]) / df['Close'].iloc[0] * 100
             
-            st.subheader('Performance')
-            st.metric(label="Total Return", value=f"{stock_return:.2f}%")
+            st.subheader('Comparison with S&P 500')
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.metric(label=f"Total Return ({stock_symbol})", value=f"{stock_return:.2f}%")
 
-            # Comparison with S&P 500
             if compare_sp500:
                 sp500_return = (sp500_data.iloc[-1] - sp500_data.iloc[0]) / sp500_data.iloc[0] * 100
                 relative_performance = stock_return - sp500_return
 
-                st.subheader('Comparison with S&P 500')
-                col1, col2 = st.columns(2)
-                with col1:
-                    st.metric(label="S&P 500 Return", value=f"{sp500_return:.2f}%")
                 with col2:
-                    st.metric(label="Relative Performance", value=f"{relative_performance:.2f}%")
+                    st.metric(label="S&P 500 Return", value=f"{sp500_return:.2f}%")
+                with col3:
+                    delta_color = "normal"
+                    if relative_performance < 0:
+                        delta_color = "inverse"
+                    elif relative_performance > 0:
+                        delta_color = "normal"
+                    st.metric(label="Relative Performance", value=f"{relative_performance:.2f}%", delta=f"{relative_performance:.2f}%", delta_color=delta_color)
+            else:
+                st.write("Enable 'Compare with S&P 500' to see more metrics")
 
 if __name__ == "__main__":
     main()
