@@ -17,7 +17,7 @@ def main():
     st.markdown('  ')
     
     # User input
-    stock_symbol = st.text_input('Enter a ticker symbol (e.g., AAPL for Apple, NVDA for NVIDIA):', 'AAPL')
+    stock_symbol = st.text_input('Enter a ticker symbol (e.g., AAPL for Apple, NVDA for NVIDIA, MSFT for Microsoft):', 'AAPL')
     
     # Date range selection
     start_date = st.date_input('Start date:', date.today() - timedelta(days=365))
