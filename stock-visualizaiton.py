@@ -12,7 +12,7 @@ def main():
     st.title('U.S. Stock Visualization App')
     
     # Display developer name
-    st.markdown('<small>Developed by: <a href="https://www.linkedin.com/in/miyoko-shimura/" target="_blank">Miyoko Shimura</a></small>', unsafe_allow_html=True)
+    st.markdown('<small>Developed by <a href="https://www.linkedin.com/in/miyoko-shimura/" target="_blank">Miyoko Shimura</a></small>', unsafe_allow_html=True)
     st.markdown("  ")
 
     # User input
