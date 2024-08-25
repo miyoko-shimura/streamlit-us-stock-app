@@ -98,7 +98,7 @@ def main():
                     relative_performance_str = f"+{relative_performance:.2f}%" if relative_performance >= 0 else f"{relative_performance:.2f}%"
                     st.metric(label="Relative Performance", value=relative_performance_str, delta_color=("normal" if relative_performance >= 0 else "inverse"))
             else:
-                st.write("😉 Enable 'Compare with S&P 500' to see more metrics.")
+                st.write("🌟 Enable 'Compare with S&P 500' to see more metrics.")
 
 if __name__ == "__main__":
     main()
