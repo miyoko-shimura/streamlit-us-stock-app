@@ -2,7 +2,6 @@ import streamlit as st
 import yfinance as yf
 import plotly.graph_objs as go
 from datetime import date, timedelta
-import pandas as pd
 
 def get_sp500_performance(start_date, end_date):
     sp500 = yf.Ticker("^GSPC")
@@ -35,11 +34,11 @@ def main():
             # Create graph
             fig = go.Figure()
             fig.add_trace(go.Candlestick(x=df.index,
-                                         open=df['Open'],
-                                         high=df['High'],
-                                         low=df['Low'],
-                                         close=df['Close'],
-                                         name=stock_symbol))
+                open=df['Open'],
+                high=df['High'],
+                low=df['Low'],
+                close=df['Close'],
+                name=stock_symbol))
 
             if compare_sp500:
                 sp500_data = get_sp500_performance(start_date, end_date)
@@ -66,8 +65,8 @@ def main():
                 ]
             }
             
-            # Display table without index
-            st.table(pd.DataFrame(stock_stats).style.hide(axis='index'))
+            # Display table
+            st.table(stock_stats)
 
             # Calculate performance
             total_return = (df['Close'].iloc[-1] - df['Close'].iloc[0]) / df['Close'].iloc[0] * 100
@@ -75,23 +74,23 @@ def main():
             if compare_sp500:
                 sp500_return = (sp500_data.iloc[-1] - sp500_data.iloc[0]) / sp500_data.iloc[0] * 100
                 
-                # Create a DataFrame for the return metrics
-                return_stats = {
-                    "Metric": [f"Stock Total Return ({stock_symbol})", "S&P 500 Total Return", f"Difference ({stock_symbol} - S&P 500)"],
-                    "Value": [f"{total_return:.2f}%", f"{sp500_return:.2f}%", f"{(total_return - sp500_return):.2f}%"]
-                }
-                
-                # Determine color for Difference based on value
-                difference = total_return - sp500_return
-                color = "red" if difference < 0 else "blue"
-
-                # Display the return metrics as a styled table
-                return_df = pd.DataFrame(return_stats)
-                return_df = return_df.style.set_properties(**{'text-align': 'center'}).hide(axis='index')
-                return_df = return_df.applymap(lambda val: f"color: {color};" if "%" in val else "")
-                
+                # Create a horizontal metrics row with narrower columns
                 st.subheader('Performance Comparison')
-                st.table(return_df)
+                col1, col2, col3 = st.columns([1, 1, 1])  # Adjust column widths
+
+                with col1:
+                    st.markdown(f"<p style='text-align:center; font-size:16px;'>Stock Total Return ({stock_symbol})</p>", unsafe_allow_html=True)
+                    st.markdown(f"<h2 style='text-align:center; color: blue;'>{total_return:.2f}%</h2>", unsafe_allow_html=True)
+                
+                with col2:
+                    st.markdown("<p style='text-align:center; font-size:16px;'>S&P 500 Total Return</p>", unsafe_allow_html=True)
+                    st.markdown(f"<h2 style='text-align:center; color: green;'>{sp500_return:.2f}%</h2>", unsafe_allow_html=True)
+
+                with col3:
+                    difference = total_return - sp500_return
+                    color = 'red' if difference < 0 else 'blue'
+                    st.markdown(f"<p style='text-align:center; font-size:16px;'>Difference ({stock_symbol} - S&P 500)</p>", unsafe_allow_html=True)
+                    st.markdown(f"<h2 style='text-align:center; color: {color};'>{difference:.2f}%</h2>", unsafe_allow_html=True)
 
             else:
                 st.write(f"Total return over period: {total_return:.2f}%")
