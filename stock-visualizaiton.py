@@ -65,8 +65,8 @@ def main():
                 ]
             }
             
-            # Display table
-            st.table(stock_stats)
+            # Display table without index
+            st.dataframe(stock_stats, use_container_width=True, height=150)
 
             # Calculate performance
             total_return = (df['Close'].iloc[-1] - df['Close'].iloc[0]) / df['Close'].iloc[0] * 100
@@ -89,7 +89,7 @@ def main():
                 with col3:
                     difference = total_return - sp500_return
                     color = 'red' if difference < 0 else 'blue'
-                    st.markdown(f"<p style='text-align:center; font-size:16px;'>Difference ({stock_symbol} - S&P 500)</p>", unsafe_allow_html=True)
+                    st.markdown(f"<p style='text-align:center; font-size:16px;'><span style='color:{color};'>Difference</span> ({stock_symbol} - S&P 500)</p>", unsafe_allow_html=True)
                     st.markdown(f"<h2 style='text-align:center; color: {color};'>{difference:.2f}%</h2>", unsafe_allow_html=True)
 
             else:
