@@ -56,14 +56,15 @@ def main():
 
             with col1:
                 st.write("**Stock Statistics**")
-                st.table({
+                stock_stats = {
                     "Metric": ["Highest Price", "Lowest Price", "Average Closing Price"],
                     "Value": [
                         f"${df['High'].max():.2f}",
                         f"${df['Low'].min():.2f}",
                         f"${df['Close'].mean():.2f}"
                     ]
-                })
+                }
+                st.dataframe(stock_stats, use_container_width=True)
 
             # Calculate performance
             total_return = (df['Close'].iloc[-1] - df['Close'].iloc[0]) / df['Close'].iloc[0] * 100
@@ -72,13 +73,14 @@ def main():
                 with col2:
                     st.write("**Comparison with S&P 500**")
                     sp500_return = (sp500_data.iloc[-1] - sp500_data.iloc[0]) / sp500_data.iloc[0] * 100
-                    st.table({
+                    comparison_stats = {
                         "Metric": ["Stock Total Return", "S&P 500 Total Return"],
                         "Value": [
                             f"{total_return:.2f}%",
                             f"{sp500_return:.2f}%"
                         ]
-                    })
+                    }
+                    st.dataframe(comparison_stats, use_container_width=True)
 
                     st.metric(label="Stock vs S&P 500", value=f"{total_return - sp500_return:.2f}%")
 
