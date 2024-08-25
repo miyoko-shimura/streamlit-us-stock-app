@@ -89,7 +89,7 @@ def main():
                 with col3:
                     difference = total_return - sp500_return
                     color = 'red' if difference < 0 else 'blue'
-                    st.markdown(f"<p style='text-align:center; font-size:16px;'>;'>Difference</span> ({stock_symbol} - S&P 500)</p>", unsafe_allow_html=True)
+                    st.markdown(f"<p style='text-align:center; font-size:16px;'>Difference</span> ({stock_symbol} - S&P 500)</p>", unsafe_allow_html=True)
                     st.markdown(f"<h2 style='text-align:center; color: {color};'>{difference:.2f}%</h2>", unsafe_allow_html=True)
 
             else:
