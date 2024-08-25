@@ -81,12 +81,8 @@ def main():
                 with col2:
                     st.metric(label="S&P 500 Return", value=f"{sp500_return:.2f}%")
                 with col3:
-                    delta_color = "normal"
-                    if relative_performance < 0:
-                        delta_color = "inverse"
-                    elif relative_performance > 0:
-                        delta_color = "normal"
-                    st.metric(label="Relative Performance", value=f"{relative_performance:.2f}%", delta=f"{relative_performance:.2f}%", delta_color=delta_color)
+                    delta_color = "normal" if relative_performance >= 0 else "inverse"
+                    st.metric(label="Relative Performance", value=f"{relative_performance:.2f}%", delta_color=delta_color)
             else:
                 st.write("Enable 'Compare with S&P 500' to see more metrics")
 
