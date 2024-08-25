@@ -9,11 +9,10 @@ def get_sp500_performance(start_date, end_date):
     return sp500_data['Close']
 
 def main():
-    st.title('U.S. Stock Visualization App')
+    st.title('U.S. Stock Visualization App 🗠')
     
-    # Display developer name
-    st.markdown('<small>Developed by <a href="https://www.linkedin.com/in/miyoko-shimura/" target="_blank">Miyoko Shimura</a></small>', unsafe_allow_html=True)
-    st.markdown("  ")
+    # Display developer name in smaller font size
+    st.markdown('<small>Developed by: <a href="https://www.linkedin.com/in/miyoko-shimura/" target="_blank">Miyoko Shimura</a></small>', unsafe_allow_html=True)
 
     # User input
     stock_symbol = st.text_input('Enter a ticker symbol (e.g., AAPL for Apple, NVDA for NVIDIA):', 'AAPL')
@@ -76,16 +75,23 @@ def main():
                 with col2:
                     st.write("**Comparison with S&P 500**")
                     sp500_return = (sp500_data.iloc[-1] - sp500_data.iloc[0]) / sp500_data.iloc[0] * 100
-                    comparison_stats = {
-                        "Metric": ["Stock Total Return", "S&P 500 Total Return"],
-                        "Value": [
-                            f"{total_return:.2f}%",
-                            f"{sp500_return:.2f}%"
-                        ]
-                    }
-                    st.dataframe(comparison_stats, use_container_width=True)
+                    
+                    # Use metrics to show key differences
+                    col3, col4 = st.columns(2)
+                    col3.metric(label="Stock Total Return", value=f"{total_return:.2f}%")
+                    col4.metric(label="S&P 500 Total Return", value=f"{sp500_return:.2f}%")
 
-                    st.metric(label="Stock vs S&P 500", value=f"{total_return - sp500_return:.2f}%")
+                    # Visual comparison using bar chart
+                    comparison_fig = go.Figure(data=[
+                        go.Bar(name='Stock', x=['Total Return'], y=[total_return], marker_color='blue'),
+                        go.Bar(name='S&P 500', x=['Total Return'], y=[sp500_return], marker_color='red')
+                    ])
+                    comparison_fig.update_layout(barmode='group', title='Performance Comparison', yaxis_title='Return (%)')
+                    st.plotly_chart(comparison_fig, use_container_width=True)
+
+                    # Show difference
+                    difference = total_return - sp500_return
+                    st.metric(label="Difference (Stock - S&P 500)", value=f"{difference:.2f}%")
 
             else:
                 st.write(f"Total return over period: {total_return:.2f}%")
