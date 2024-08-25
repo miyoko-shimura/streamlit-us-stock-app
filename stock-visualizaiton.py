@@ -19,9 +19,15 @@ def main():
     # User input
     stock_symbol = st.text_input('Enter a ticker symbol (e.g., AAPL for Apple, NVDA for NVIDIA, MSFT for Microsoft):', 'AAPL')
     
-    # Date range selection
-    start_date = st.date_input('Start date:', date.today() - timedelta(days=365))
-    end_date = st.date_input('End date:', date.today())
+    # Date range selection using slider
+    date_range = st.slider(
+        "Select date range:",
+        min_value=date.today() - timedelta(days=365 * 2),
+        max_value=date.today(),
+        value=(date.today() - timedelta(days=365), date.today()),
+        format="YYYY-MM-DD"
+    )
+    start_date, end_date = date_range
 
     # S&P 500 comparison option
     compare_sp500 = st.checkbox('Compare with S&P 500')
@@ -54,18 +60,15 @@ def main():
 
             st.plotly_chart(fig, use_container_width=True)
 
-            # Summary with ticker symbol in the header
-            summary_data = {
-                'Metric': ['Highest Price', 'Lowest Price', 'Average Closing Price'],
-                'Value': [
-                    f"${df['High'].max():.2f}",
-                    f"${df['Low'].min():.2f}",
-                    f"${df['Close'].mean():.2f}"
-                ]
-            }
-
+            # Summary with ticker symbol and date range in the header
             st.subheader(f'Stock Overview for {stock_symbol} ({start_date} to {end_date})')
-            st.table(pd.DataFrame(summary_data).set_index('Metric'))
+            highest_price = f"${df['High'].max():.2f}"
+            lowest_price = f"${df['Low'].min():.2f}"
+            average_closing_price = f"${df['Close'].mean():.2f}"
+            
+            st.write(f"**Highest Price:** {highest_price}")
+            st.write(f"**Lowest Price:** {lowest_price}")
+            st.write(f"**Average Closing Price:** {average_closing_price}")
 
             # Performance and Comparison with S&P 500
             stock_return = (df['Close'].iloc[-1] - df['Close'].iloc[0]) / df['Close'].iloc[0] * 100
@@ -82,8 +85,10 @@ def main():
                 with col2:
                     st.metric(label="S&P 500 Return", value=f"{sp500_return:.2f}%")
                 with col3:
+                    # Add + sign if relative_performance is positive
+                    relative_performance_str = f"+{relative_performance:.2f}%" if relative_performance >= 0 else f"{relative_performance:.2f}%"
                     color = "green" if relative_performance >= 0 else "red"
-                    st.metric(label="Relative Performance", value=f"{relative_performance:.2f}%", delta_color=("normal" if relative_performance >= 0 else "inverse"))
+                    st.metric(label="Relative Performance", value=relative_performance_str, delta_color=("normal" if relative_performance >= 0 else "inverse"))
             else:
                 st.write("")
                 st.write("😉 Enable 'Compare with S&P 500' from the menu to see more metrics.")
