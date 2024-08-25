@@ -78,7 +78,7 @@ def main():
                     
                     # Use metrics to show key differences
                     col3, col4 = st.columns(2)
-                    col3.metric(label="Stock Total Return", value=f"{total_return:.2f}%")
+                    col3.metric(label=f"Stock Total Return ({stock_symbol})", value=f"{total_return:.2f}%")
                     col4.metric(label="S&P 500 Total Return", value=f"{sp500_return:.2f}%")
 
                     # Show difference
