@@ -79,22 +79,4 @@ def main():
                     # Use metrics to show key differences
                     col3, col4 = st.columns(2)
                     col3.metric(label="Stock Total Return", value=f"{total_return:.2f}%")
-                    col4.metric(label="S&P 500 Total Return", value=f"{sp500_return:.2f}%")
-
-                    # Visual comparison using horizontal bar chart
-                    comparison_fig = go.Figure(data=[
-                        go.Bar(name='Stock', y=['Total Return'], x=[total_return], orientation='h', marker_color='rgba(100, 149, 237, 0.6)'),
-                        go.Bar(name='S&P 500', y=['Total Return'], x=[sp500_return], orientation='h', marker_color='rgba(255, 182, 193, 0.6)')
-                    ])
-                    comparison_fig.update_layout(barmode='group', title='Performance Comparison', xaxis_title='Return (%)')
-                    st.plotly_chart(comparison_fig, use_container_width=True)
-
-                    # Show difference
-                    difference = total_return - sp500_return
-                    st.metric(label="Difference (Stock - S&P 500)", value=f"{difference:.2f}%")
-
-            else:
-                st.write(f"Total return over period: {total_return:.2f}%")
-
-if __name__ == "__main__":
-    main()
+                    col4.metric(label="S&P 500 Total Return",
