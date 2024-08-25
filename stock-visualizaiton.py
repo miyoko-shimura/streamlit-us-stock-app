@@ -9,7 +9,10 @@ def get_sp500_performance(start_date, end_date):
     return sp500_data['Close']
 
 def main():
-    st.title('U.S. Stock Visualization App')
+    st.title('U.S. Stock Visualization App 🗠')
+    
+    # Display developer name
+  　 st.markdown("### Developed by: [Miyoko Shimura](https://www.linkedin.com/in/miyoko-shimura/)")
 
     # User input
     stock_symbol = st.text_input('Enter a ticker symbol (e.g., AAPL for Apple, NVDA for NVIDIA):', 'AAPL')
@@ -50,12 +53,11 @@ def main():
             st.plotly_chart(fig, use_container_width=True)
 
             # Display statistics
-            st.subheader('Statistics')
+            st.subheader('Stock Statistics')
             
             col1, col2 = st.columns(2)
 
             with col1:
-                st.write("**Stock Statistics**")
                 stock_stats = {
                     "Metric": ["Highest Price", "Lowest Price", "Average Closing Price"],
                     "Value": [
