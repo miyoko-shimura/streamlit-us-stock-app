@@ -12,7 +12,7 @@ def main():
     st.title('U.S. Stock Visualization App 🗠')
     
     # Display developer name
-  　 st.markdown("### Developed by: [Miyoko Shimura](https://www.linkedin.com/in/miyoko-shimura/)")
+    st.markdown("### Developed by: [Miyoko Shimura](https://www.linkedin.com/in/miyoko-shimura/)")
 
     # User input
     stock_symbol = st.text_input('Enter a ticker symbol (e.g., AAPL for Apple, NVDA for NVIDIA):', 'AAPL')
