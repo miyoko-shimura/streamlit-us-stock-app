@@ -2,6 +2,7 @@ import streamlit as st
 import yfinance as yf
 import plotly.graph_objs as go
 from datetime import date, timedelta
+import pandas as pd
 
 def get_sp500_performance(start_date, end_date):
     sp500 = yf.Ticker("^GSPC")
@@ -60,19 +61,28 @@ def main():
             st.plotly_chart(fig, use_container_width=True)
 
             # Summary with ticker symbol and date range in the header
-            st.subheader(f'Summary for {stock_symbol} ({start_date} to {end_date})')
-            highest_price = f"${df['High'].max():.2f}"
-            lowest_price = f"${df['Low'].min():.2f}"
-            average_closing_price = f"${df['Close'].mean():.2f}"
-            
-            st.write(f"**Highest Price:** {highest_price}")
-            st.write(f"**Lowest Price:** {lowest_price}")
-            st.write(f"**Average Closing Price:** {average_closing_price}")
+            st.subheader(f'Stock Overview for {stock_symbol} ({start_date} to {end_date})')
+
+            # Creating a DataFrame for summary
+            summary_data = {
+                'Metric': ['Highest Price', 'Lowest Price', 'Average Closing Price'],
+                'Value': [
+                    f"${df['High'].max():.2f}",
+                    f"${df['Low'].min():.2f}",
+                    f"${df['Close'].mean():.2f}"
+                ]
+            }
+
+            # Convert to DataFrame and set Metric as index
+            summary_df = pd.DataFrame(summary_data).set_index('Metric')
+
+            # Display the table without showing the index
+            st.table(summary_df)
 
             # Performance and Comparison with S&P 500
             stock_return = (df['Close'].iloc[-1] - df['Close'].iloc[0]) / df['Close'].iloc[0] * 100
             
-            st.subheader('Comparison with S&P 500')
+            st.subheader('Return Summary')
             col1, col2, col3 = st.columns(3)
             with col1:
                 st.metric(label=f"Total Return ({stock_symbol})", value=f"{stock_return:.2f}%")
