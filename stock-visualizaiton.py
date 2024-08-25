@@ -9,7 +9,7 @@ def get_sp500_performance(start_date, end_date):
     return sp500_data['Close']
 
 def main():
-    st.title('U.S. Stock Visualization App 🗠')
+    st.title('U.S. Stock Visualization App')
     
     # Display developer name in smaller font size
     st.markdown('<small>Developed by: <a href="https://www.linkedin.com/in/miyoko-shimura/" target="_blank">Miyoko Shimura</a></small>', unsafe_allow_html=True)
@@ -81,9 +81,22 @@ def main():
                     col3.metric(label=f"Stock Total Return ({stock_symbol})", value=f"{total_return:.2f}%")
                     col4.metric(label="S&P 500 Total Return", value=f"{sp500_return:.2f}%")
 
-                    # Show difference
+                    # Visual comparison using horizontal bar chart with reduced height
+                    comparison_fig = go.Figure(data=[
+                        go.Bar(name='Stock', y=['Total Return'], x=[total_return], orientation='h', marker_color='rgba(100, 149, 237, 0.6)'),
+                        go.Bar(name='S&P 500', y=['Total Return'], x=[sp500_return], orientation='h', marker_color='rgba(255, 182, 193, 0.6)')
+                    ])
+                    comparison_fig.update_layout(
+                        barmode='group',
+                        title='Performance Comparison',
+                        xaxis_title='Return (%)',
+                        height=300  # Adjust the height here
+                    )
+                    st.plotly_chart(comparison_fig, use_container_width=True)
+
+                    # Show difference with ticker symbol included
                     difference = total_return - sp500_return
-                    st.metric(label="Difference (Stock - S&P 500)", value=f"{difference:.2f}%")
+                    st.metric(label=f"Difference ({stock_symbol} - S&P 500)", value=f"{difference:.2f}%")
 
             else:
                 st.write(f"Total return over period: {total_return:.2f}%")
