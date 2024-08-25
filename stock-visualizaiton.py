@@ -40,3 +40,41 @@ def main():
                 low=df['Low'],
                 close=df['Close'],
                 name=stock_symbol))
+
+            if compare_sp500:
+                sp500_data = get_sp500_performance(start_date, end_date)
+                fig.add_trace(go.Scatter(x=sp500_data.index, y=sp500_data, name='S&P 500', line=dict(color='red')))
+
+            fig.update_layout(
+                title=f'Stock Price Chart for {stock_symbol}',
+                yaxis_title='Price (USD)',
+                xaxis_title='Date'
+            )
+
+            st.plotly_chart(fig, use_container_width=True)
+
+            # Simplified summary
+            summary_data = {
+                'Metric': ['Highest Price', 'Lowest Price', 'Average Closing Price', 'Total Return'],
+                'Value': [
+                    f"${df['High'].max():.2f}",
+                    f"${df['Low'].min():.2f}",
+                    f"${df['Close'].mean():.2f}",
+                    f"{((df['Close'].iloc[-1] - df['Close'].iloc[0]) / df['Close'].iloc[0] * 100):.2f}%"
+                ]
+            }
+
+            if compare_sp500:
+                sp500_return = (sp500_data.iloc[-1] - sp500_data.iloc[0]) / sp500_data.iloc[0] * 100
+                stock_return = (df['Close'].iloc[-1] - df['Close'].iloc[0]) / df['Close'].iloc[0] * 100
+                summary_data['Metric'].extend(['S&P 500 Return', 'Relative Performance'])
+                summary_data['Value'].extend([
+                    f"{sp500_return:.2f}%",
+                    f"{stock_return - sp500_return:.2f}%"
+                ])
+
+            st.subheader('Summary')
+            st.table(pd.DataFrame(summary_data))
+
+if __name__ == "__main__":
+    main()
