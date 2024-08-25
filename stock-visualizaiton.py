@@ -64,7 +64,7 @@ def main():
                 ]
             }
 
-            st.subheader(f'Stock Overview: {stock_symbol} ({start_date} to {end_date})')
+            st.subheader(f'Stock Overview for {stock_symbol} ({start_date} to {end_date})')
             st.table(pd.DataFrame(summary_data).set_index('Metric'))
 
             # Performance and Comparison with S&P 500
