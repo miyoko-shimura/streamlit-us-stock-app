@@ -51,18 +51,39 @@ def main():
 
             # Display statistics
             st.subheader('Statistics')
-            st.write(f"Highest price during period: ${df['High'].max():.2f}")
-            st.write(f"Lowest price during period: ${df['Low'].min():.2f}")
-            st.write(f"Average closing price: ${df['Close'].mean():.2f}")
+            
+            col1, col2 = st.columns(2)
+
+            with col1:
+                st.write("**Stock Statistics**")
+                st.table({
+                    "Metric": ["Highest Price", "Lowest Price", "Average Closing Price"],
+                    "Value": [
+                        f"${df['High'].max():.2f}",
+                        f"${df['Low'].min():.2f}",
+                        f"${df['Close'].mean():.2f}"
+                    ]
+                })
 
             # Calculate performance
             total_return = (df['Close'].iloc[-1] - df['Close'].iloc[0]) / df['Close'].iloc[0] * 100
-            st.write(f"Total return over period: {total_return:.2f}%")
 
             if compare_sp500:
-                sp500_return = (sp500_data.iloc[-1] - sp500_data.iloc[0]) / sp500_data.iloc[0] * 100
-                st.write(f"S&P 500 return: {sp500_return:.2f}%")
-                st.write(f"Relative performance to S&P 500: {total_return - sp500_return:.2f}%")
+                with col2:
+                    st.write("**Comparison with S&P 500**")
+                    sp500_return = (sp500_data.iloc[-1] - sp500_data.iloc[0]) / sp500_data.iloc[0] * 100
+                    st.table({
+                        "Metric": ["Stock Total Return", "S&P 500 Total Return"],
+                        "Value": [
+                            f"{total_return:.2f}%",
+                            f"{sp500_return:.2f}%"
+                        ]
+                    })
+
+                    st.metric(label="Stock vs S&P 500", value=f"{total_return - sp500_return:.2f}%")
+
+            else:
+                st.write(f"Total return over period: {total_return:.2f}%")
 
 if __name__ == "__main__":
     main()
