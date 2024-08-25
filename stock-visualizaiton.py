@@ -2,6 +2,7 @@ import streamlit as st
 import yfinance as yf
 import plotly.graph_objs as go
 from datetime import date, timedelta
+import pandas as pd
 
 def get_sp500_performance(start_date, end_date):
     sp500 = yf.Ticker("^GSPC")
@@ -41,7 +42,7 @@ def main():
                 name=stock_symbol))
 
             if compare_sp500:
-                sp500_data = get_sp500_performance(start_date, end_date)
+                sp500_data = get_sp500_performance(start_date, end=end_date)
                 fig.add_trace(go.Scatter(x=sp500_data.index, y=sp500_data, name='S&P 500', line=dict(color='red')))
 
             fig.update_layout(
@@ -52,7 +53,7 @@ def main():
 
             st.plotly_chart(fig, use_container_width=True)
 
-            # Display statistics as a table
+            # Display statistics as a narrower table
             st.subheader('Stock Statistics Summary')
             
             # Prepare data for table
@@ -65,8 +66,9 @@ def main():
                 ]
             }
             
-            # Display table without index
-            st.dataframe(stock_stats, use_container_width=True, height=150)
+            # Convert to DataFrame and use st.table for better control over width
+            stats_df = pd.DataFrame(stock_stats)
+            st.table(stats_df)
 
             # Calculate performance
             total_return = (df['Close'].iloc[-1] - df['Close'].iloc[0]) / df['Close'].iloc[0] * 100
@@ -74,23 +76,29 @@ def main():
             if compare_sp500:
                 sp500_return = (sp500_data.iloc[-1] - sp500_data.iloc[0]) / sp500_data.iloc[0] * 100
                 
-                # Create a horizontal metrics row with narrower columns
-                st.subheader('Performance Comparison')
-                col1, col2, col3 = st.columns([1, 1, 1])  # Adjust column widths
-
-                with col1:
-                    st.markdown(f"<p style='text-align:center; font-size:16px;'>Stock Total Return ({stock_symbol})</p>", unsafe_allow_html=True)
-                    st.markdown(f"<h2 style='text-align:center;'>{total_return:.2f}%</h2>", unsafe_allow_html=True)
+                # Create a DataFrame for performance comparison
+                difference = total_return - sp500_return
+                color = 'red' if difference < 0 else 'blue'
+                performance_data = {
+                    "Metric": [f"Stock Total Return ({stock_symbol})", "S&P 500 Total Return", "Difference"],
+                    "Value": [
+                        f"{total_return:.2f}%",
+                        f"{sp500_return:.2f}%",
+                        f"{difference:.2f}%"
+                    ]
+                }
                 
-                with col2:
-                    st.markdown("<p style='text-align:center; font-size:16px;'>S&P 500 Total Return</p>", unsafe_allow_html=True)
-                    st.markdown(f"<h2 style='text-align:center;'>{sp500_return:.2f}%</h2>", unsafe_allow_html=True)
+                performance_df = pd.DataFrame(performance_data)
 
-                with col3:
-                    difference = total_return - sp500_return
-                    color = 'red' if difference < 0 else 'blue'
-                    st.markdown(f"<p style='text-align:center; font-size:16px;'>Difference</span> ({stock_symbol} - S&P 500)</p>", unsafe_allow_html=True)
-                    st.markdown(f"<h2 style='text-align:center; color: {color};'>{difference:.2f}%</h2>", unsafe_allow_html=True)
+                # Use conditional formatting for Difference
+                def highlight_difference(row):
+                    if "Difference" in row["Metric"]:
+                        return [f"color: {color}"] * len(row)
+                    else:
+                        return [""] * len(row)
+
+                # Apply conditional formatting
+                st.table(performance_df.style.apply(highlight_difference, axis=1))
 
             else:
                 st.write(f"Total return over period: {total_return:.2f}%")
