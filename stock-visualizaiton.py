@@ -9,7 +9,7 @@ def get_sp500_performance(start_date, end_date):
     return sp500_data['Close']
 
 def main():
-    st.title('U.S. Stock Visualization App 🗠')
+    st.title('U.S. Stock Visualization App 💲')
     
     # Display developer name
     st.markdown("### Developed by [Miyoko Shimura](https://www.linkedin.com/in/miyoko-shimura/)")
