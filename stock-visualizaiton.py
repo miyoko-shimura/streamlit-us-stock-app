@@ -70,7 +70,7 @@ def main():
             # Performance and Comparison with S&P 500
             stock_return = (df['Close'].iloc[-1] - df['Close'].iloc[0]) / df['Close'].iloc[0] * 100
             
-            st.subheader('Comparison with S&P 500')
+            st.subheader('Return Summary')
             col1, col2, col3 = st.columns(3)
             with col1:
                 st.metric(label=f"Total Return ({stock_symbol})", value=f"{stock_return:.2f}%")
