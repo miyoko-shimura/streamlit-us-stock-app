@@ -52,40 +52,21 @@ def main():
 
             st.plotly_chart(fig, use_container_width=True)
 
-            # Display statistics
-            st.subheader('Stock Statistics')
-            
-            col1, col2 = st.columns(2)
-
-            with col1:
-                stock_stats = {
-                    "Metric": ["Highest Price", "Lowest Price", "Average Closing Price"],
-                    "Value": [
-                        f"${df['High'].max():.2f}",
-                        f"${df['Low'].min():.2f}",
-                        f"${df['Close'].mean():.2f}"
-                    ]
-                }
-                st.dataframe(stock_stats, use_container_width=True)
-
             # Calculate performance
             total_return = (df['Close'].iloc[-1] - df['Close'].iloc[0]) / df['Close'].iloc[0] * 100
 
             if compare_sp500:
-                with col2:
-                    st.write("**Comparison with S&P 500**")
-                    sp500_return = (sp500_data.iloc[-1] - sp500_data.iloc[0]) / sp500_data.iloc[0] * 100
-                    
-                    # Use metrics to show key differences
-                    col3, col4 = st.columns(2)
-                    col3.metric(label=f"Stock Total Return ({stock_symbol})", value=f"{total_return:.2f}%")
-                    col4.metric(label="S&P 500 Total Return", value=f"{sp500_return:.2f}%")
+                sp500_return = (sp500_data.iloc[-1] - sp500_data.iloc[0]) / sp500_data.iloc[0] * 100
+                
+                # Use metrics to show key differences
+                col1, col2, col3 = st.columns(3)
+                col1.metric(label=f"Stock Total Return ({stock_symbol})", value=f"{total_return:.2f}%")
+                col2.metric(label="S&P 500 Total Return", value=f"{sp500_return:.2f}%")
 
-                  
-
-                    # Show difference with ticker symbol included
-                    difference = total_return - sp500_return
-                    st.metric(label=f"Difference ({stock_symbol} - S&P 500)", value=f"{difference:.2f}%")
+                # Show difference with ticker symbol included, adjust color based on difference
+                difference = total_return - sp500_return
+                delta_color = "inverse" if difference < 0 else "normal"
+                col3.metric(label=f"Difference ({stock_symbol} - S&P 500)", value=f"{difference:.2f}%", delta_color=delta_color)
 
             else:
                 st.write(f"Total return over period: {total_return:.2f}%")
