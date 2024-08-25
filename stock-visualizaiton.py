@@ -52,23 +52,21 @@ def main():
 
             st.plotly_chart(fig, use_container_width=True)
 
-            # Display statistics
-            st.subheader('Stock Statistics')
+            # Display statistics as a table
+            st.subheader('Stock Statistics Summary')
             
-            # Use columns to organize statistics in a rich UI format
-            col1, col2, col3 = st.columns(3)
-
-            with col1:
-                st.markdown("### 📈 Highest Price")
-                st.metric(label="", value=f"${df['High'].max():.2f}")
-
-            with col2:
-                st.markdown("### 📉 Lowest Price")
-                st.metric(label="", value=f"${df['Low'].min():.2f}")
-
-            with col3:
-                st.markdown("### 📊 Average Closing Price")
-                st.metric(label="", value=f"${df['Close'].mean():.2f}")
+            # Prepare data for table
+            stock_stats = {
+                "Metric": ["Highest Price", "Lowest Price", "Average Closing Price"],
+                "Value": [
+                    f"${df['High'].max():.2f}",
+                    f"${df['Low'].min():.2f}",
+                    f"${df['Close'].mean():.2f}"
+                ]
+            }
+            
+            # Display table
+            st.table(stock_stats)
 
             # Calculate performance
             total_return = (df['Close'].iloc[-1] - df['Close'].iloc[0]) / df['Close'].iloc[0] * 100
