@@ -17,11 +17,11 @@ def main():
     st.markdown('  ')
     
     # User input
-    stock_symbol = st.text_input('Step 1: Enter a ticker symbol (e.g., AAPL for Apple, NVDA for NVIDIA, MSFT for Microsoft):', 'AAPL')
+    stock_symbol = st.text_input('**Enter a ticker symbol (e.g., AAPL for Apple, NVDA for NVIDIA, MSFT for Microsoft):**', 'AAPL')
     
     # Date range selection using slider
     date_range = st.slider(
-        "Step 2: Select date range:",
+       "**Select date range:**",
         min_value=date.today() - timedelta(days=730),  # Set minimum value to 2 years ago
         max_value=date.today(),  # Set maximum value to today
         value=(date.today() - timedelta(days=365), date.today()),  # Default range set to last 1 year
