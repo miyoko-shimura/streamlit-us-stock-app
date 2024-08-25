@@ -2,6 +2,7 @@ import streamlit as st
 import yfinance as yf
 import plotly.graph_objs as go
 from datetime import date, timedelta
+import pandas as pd
 
 def get_sp500_performance(start_date, end_date):
     sp500 = yf.Ticker("^GSPC")
@@ -54,14 +55,17 @@ def main():
             st.plotly_chart(fig, use_container_width=True)
 
             # Summary with ticker symbol in the header
+            summary_data = {
+                'Metric': ['Highest Price', 'Lowest Price', 'Average Closing Price'],
+                'Value': [
+                    f"${df['High'].max():.2f}",
+                    f"${df['Low'].min():.2f}",
+                    f"${df['Close'].mean():.2f}"
+                ]
+            }
+
             st.subheader(f'Summary for {stock_symbol}')
-            highest_price = f"${df['High'].max():.2f}"
-            lowest_price = f"${df['Low'].min():.2f}"
-            average_closing_price = f"${df['Close'].mean():.2f}"
-            
-            st.write(f"**Highest Price:** {highest_price}")
-            st.write(f"**Lowest Price:** {lowest_price}")
-            st.write(f"**Average Closing Price:** {average_closing_price}")
+            st.table(pd.DataFrame(summary_data).set_index('Metric'))
 
             # Performance and Comparison with S&P 500
             stock_return = (df['Close'].iloc[-1] - df['Close'].iloc[0]) / df['Close'].iloc[0] * 100
