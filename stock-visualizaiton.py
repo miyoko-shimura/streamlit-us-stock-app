@@ -20,6 +20,7 @@ def main():
     stock_symbol = st.text_input('Enter a ticker symbol (e.g., AAPL for Apple, NVDA for NVIDIA, MSFT for Microsoft):', 'AAPL')
     
     # Date range selection using slider
+     st.markdown('  ')
     date_range = st.slider(
        "Select date range:",
         min_value=date.today() - timedelta(days=730),  # Set minimum value to 2 years ago
