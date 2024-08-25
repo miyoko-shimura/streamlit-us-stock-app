@@ -53,28 +53,36 @@ def main():
 
             st.plotly_chart(fig, use_container_width=True)
 
-            # Simplified summary
+            # Summary
             summary_data = {
-                'Metric': ['Highest Price', 'Lowest Price', 'Average Closing Price', 'Total Return'],
+                'Metric': ['Highest Price', 'Lowest Price', 'Average Closing Price'],
                 'Value': [
                     f"${df['High'].max():.2f}",
                     f"${df['Low'].min():.2f}",
-                    f"${df['Close'].mean():.2f}",
-                    f"{((df['Close'].iloc[-1] - df['Close'].iloc[0]) / df['Close'].iloc[0] * 100):.2f}%"
+                    f"${df['Close'].mean():.2f}"
                 ]
             }
 
+            st.subheader('Summary')
+            st.table(pd.DataFrame(summary_data).set_index('Metric'))
+
+            # Performance
+            stock_return = (df['Close'].iloc[-1] - df['Close'].iloc[0]) / df['Close'].iloc[0] * 100
+            
+            st.subheader('Performance')
+            st.metric(label="Total Return", value=f"{stock_return:.2f}%")
+
+            # Comparison with S&P 500
             if compare_sp500:
                 sp500_return = (sp500_data.iloc[-1] - sp500_data.iloc[0]) / sp500_data.iloc[0] * 100
-                stock_return = (df['Close'].iloc[-1] - df['Close'].iloc[0]) / df['Close'].iloc[0] * 100
-                summary_data['Metric'].extend(['S&P 500 Return', 'Relative Performance'])
-                summary_data['Value'].extend([
-                    f"{sp500_return:.2f}%",
-                    f"{stock_return - sp500_return:.2f}%"
-                ])
+                relative_performance = stock_return - sp500_return
 
-            st.subheader('Summary')
-            st.table(pd.DataFrame(summary_data))
+                st.subheader('Comparison with S&P 500')
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.metric(label="S&P 500 Return", value=f"{sp500_return:.2f}%")
+                with col2:
+                    st.metric(label="Relative Performance", value=f"{relative_performance:.2f}%")
 
 if __name__ == "__main__":
     main()
