@@ -14,7 +14,8 @@ def main():
     
     # Display developer name in smaller font size
     st.markdown('<small>Developed by: <a href="https://www.linkedin.com/in/miyoko-shimura/" target="_blank">Miyoko Shimura</a></small>', unsafe_allow_html=True)
-
+    st.markdown('  ')
+    
     # User input
     stock_symbol = st.text_input('Enter a ticker symbol (e.g., AAPL for Apple, NVDA for NVIDIA):', 'AAPL')
     
@@ -83,7 +84,7 @@ def main():
                 with col3:
                     color = "green" if relative_performance >= 0 else "red"
                     st.markdown(f"**Relative Performance**")
-                    st.markdown(f"<span style='color:{color}; font-size:20px;'>{relative_performance:.2f}%</span>", unsafe_allow_html=True)
+                    st.markdown(f"<span style='color:{color};'>{relative_performance:.2f}%</span>", unsafe_allow_html=True)
             else:
                 st.write("Enable 'Compare with S&P 500' to see more metrics")
 
