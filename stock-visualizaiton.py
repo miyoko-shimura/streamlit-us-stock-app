@@ -84,7 +84,7 @@ def main():
                 
                 with col2:
                     st.markdown("<p style='text-align:center; font-size:16px;'>S&P 500 Total Return</p>", unsafe_allow_html=True)
-                    st.markdown(f"<h2 style='text-align:center; color: green;'>{sp500_return:.2f}%</h2>", unsafe_allow_html=True)
+                    st.markdown(f"<h2 style='text-align:center;'>{sp500_return:.2f}%</h2>", unsafe_allow_html=True)
 
                 with col3:
                     difference = total_return - sp500_return
