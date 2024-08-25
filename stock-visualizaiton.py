@@ -12,7 +12,7 @@ def main():
     st.title('U.S. Stock Visualization App')
 
     # User input
-    stock_symbol = st.text_input('Enter a ticker symbol (e.g., AAPL for Apple):', 'AAPL')
+    stock_symbol = st.text_input('Enter a ticker symbol (e.g., AAPL for Apple NVDA for NVIDIA):', 'AAPL')
     
     # Date range selection
     start_date = st.date_input('Start date:', date.today() - timedelta(days=365))
