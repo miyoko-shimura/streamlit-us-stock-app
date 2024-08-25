@@ -2,7 +2,6 @@ import streamlit as st
 import yfinance as yf
 import plotly.graph_objs as go
 from datetime import date, timedelta
-import pandas as pd
 
 def get_sp500_performance(start_date, end_date):
     sp500 = yf.Ticker("^GSPC")
@@ -22,9 +21,9 @@ def main():
     # Date range selection using slider
     date_range = st.slider(
         "Select date range:",
-        min_value=date.today() - timedelta(days=365 * 2),
-        max_value=date.today(),
-        value=(date.today() - timedelta(days=365), date.today()),
+        min_value=date.today() - timedelta(days=730),  # Set minimum value to 2 years ago
+        max_value=date.today(),  # Set maximum value to today
+        value=(date.today() - timedelta(days=365), date.today()),  # Default range set to last 1 year
         format="YYYY-MM-DD"
     )
     start_date, end_date = date_range
@@ -61,7 +60,7 @@ def main():
             st.plotly_chart(fig, use_container_width=True)
 
             # Summary with ticker symbol and date range in the header
-            st.subheader(f'Stock Overview for {stock_symbol} ({start_date} to {end_date})')
+            st.subheader(f'Summary for {stock_symbol} ({start_date} to {end_date})')
             highest_price = f"${df['High'].max():.2f}"
             lowest_price = f"${df['Low'].min():.2f}"
             average_closing_price = f"${df['Close'].mean():.2f}"
@@ -73,7 +72,7 @@ def main():
             # Performance and Comparison with S&P 500
             stock_return = (df['Close'].iloc[-1] - df['Close'].iloc[0]) / df['Close'].iloc[0] * 100
             
-            st.subheader('Return Summary')
+            st.subheader('Comparison with S&P 500')
             col1, col2, col3 = st.columns(3)
             with col1:
                 st.metric(label=f"Total Return ({stock_symbol})", value=f"{stock_return:.2f}%")
@@ -85,13 +84,11 @@ def main():
                 with col2:
                     st.metric(label="S&P 500 Return", value=f"{sp500_return:.2f}%")
                 with col3:
-                    # Add + sign if relative_performance is positive
-                    relative_performance_str = f"+{relative_performance:.2f}%" if relative_performance >= 0 else f"{relative_performance:.2f}%"
                     color = "green" if relative_performance >= 0 else "red"
+                    relative_performance_str = f"+{relative_performance:.2f}%" if relative_performance >= 0 else f"{relative_performance:.2f}%"
                     st.metric(label="Relative Performance", value=relative_performance_str, delta_color=("normal" if relative_performance >= 0 else "inverse"))
             else:
-                st.write("")
-                st.write("😉 Enable 'Compare with S&P 500' from the menu to see more metrics.")
+                st.write("Enable 'Compare with S&P 500' to see more metrics")
 
 if __name__ == "__main__":
     main()
