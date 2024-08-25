@@ -81,19 +81,6 @@ def main():
                     col3.metric(label="Stock Total Return", value=f"{total_return:.2f}%")
                     col4.metric(label="S&P 500 Total Return", value=f"{sp500_return:.2f}%")
 
-                    # Visual comparison using horizontal bar chart with reduced height
-                    comparison_fig = go.Figure(data=[
-                        go.Bar(name='Stock', y=['Total Return'], x=[total_return], orientation='h', marker_color='rgba(100, 149, 237, 0.6)'),
-                        go.Bar(name='S&P 500', y=['Total Return'], x=[sp500_return], orientation='h', marker_color='rgba(255, 182, 193, 0.6)')
-                    ])
-                    comparison_fig.update_layout(
-                        barmode='group',
-                        title='Performance Comparison',
-                        xaxis_title='Return (%)',
-                        height=300  # Adjust the height here
-                    )
-                    st.plotly_chart(comparison_fig, use_container_width=True)
-
                     # Show difference
                     difference = total_return - sp500_return
                     st.metric(label="Difference (Stock - S&P 500)", value=f"{difference:.2f}%")
