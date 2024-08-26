@@ -12,7 +12,7 @@ This Streamlit app allows users to visualize the stock price of U.S. companies o
 
 ## Demo
 
-Check out the live demo [here](#) (replace `#` with your deployment URL).
+Check out the live demo [here](https://stock-app-miyokoshimura.streamlit.app) (replace `#` with your deployment URL).
 
 ## Installation
 
