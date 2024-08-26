@@ -2,6 +2,10 @@
 
 This Streamlit app allows users to visualize the stock price of U.S. companies over a selected time period. It provides interactive candlestick charts and allows comparison with the S&P 500 index for performance benchmarking.
 
+## Demo
+
+Check out the live demo [here](https://stock-app-miyokoshimura.streamlit.app) (replace `#` with your deployment URL).
+
 ## Features
 
 - Visualize historical stock prices using candlestick charts.
@@ -9,10 +13,6 @@ This Streamlit app allows users to visualize the stock price of U.S. companies o
 - Display metrics such as highest price, lowest price, and average closing price.
 - Calculate and display the total return for the selected stock and the S&P 500.
 - Interactive date range selection and stock symbol input.
-
-## Demo
-
-Check out the live demo [here](https://stock-app-miyokoshimura.streamlit.app) (replace `#` with your deployment URL).
 
 ## Installation
 
